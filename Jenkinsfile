@@ -14,10 +14,11 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t $IMAGE_NAME .'
-            }
+      stage('Build Docker Image') {
+    steps {
+        bat 'docker build -t docker-web-app .'
+    }
+}
         }
 
         stage('Push Docker Image') {

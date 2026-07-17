@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/yourusername/docker-web-app.git'
+                    url: 'https://github.com/Rakeshchintu123/docker-web-app.git'
             }
         }
 

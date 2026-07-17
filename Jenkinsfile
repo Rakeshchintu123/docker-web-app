@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "yourdockerhubusername/my-web-image"
+        IMAGE_NAME = "docker-web-app"
     }
 
     stages {
@@ -14,11 +14,10 @@ pipeline {
             }
         }
 
-      stage('Build Docker Image') {
-    steps {
-        bat 'docker build -t docker-web-app .'
-    }
-}
+        stage('Build Docker Image') {
+            steps {
+                bat 'docker build -t %IMAGE_NAME% .'
+            }
         }
 
         stage('Push Docker Image') {
@@ -28,9 +27,9 @@ pipeline {
                     usernameVariable: 'USER',
                     passwordVariable: 'PASS'
                 )]) {
-                    sh '''
-                        echo $PASS | docker login -u $USER --password-stdin
-                        docker push $IMAGE_NAME
+                    bat '''
+                    echo %PASS% | docker login -u %USER% --password-stdin
+                    docker push %IMAGE_NAME%
                     '''
                 }
             }
@@ -38,11 +37,10 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh '''
-                    docker stop web || true
-                    docker rm web || true
-
-                    docker run -d --name web -p 80:80 $IMAGE_NAME
+                bat '''
+                docker stop web
+                docker rm web
+                docker run -d --name web -p 80:80 %IMAGE_NAME%
                 '''
             }
         }
